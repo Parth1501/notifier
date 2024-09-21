@@ -1,5 +1,6 @@
 package com.job.scrapper.util;
 
+import com.job.scrapper.model.JobData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -12,25 +13,64 @@ import java.util.Set;
 @Slf4j
 public class Utility {
     private static final String basefolder="./";
+
     public static String createData(List<List<String>> data) {
         StringBuilder res=new StringBuilder();
-        var counter=0;
         var alreadySentSet=readHashFromFile();
-        for(var eachLine:data) {
-            var appNumber=generateHash(eachLine.get(1));
-            if(!alreadySentSet.contains(appNumber)) {
-                res.append("JOB ").append(++counter).append("\n\n");
-                res.append("Job title: ").append(eachLine.get(1)).append("\n\n")
-                        .append("Contact Details: ").append(eachLine.get(2)).append("\n\n")
-                        .append("Last Date: ").append(eachLine.get(3)).append("\n\n")
-                        .append("Post Name: ").append(eachLine.get(6)).append("\n\n")
-                        .append("Level: ").append(eachLine.get(7));
-                res.append("\n\n\n");
-                alreadySentSet.add(appNumber);
+        if(!data.isEmpty()) {
+            boolean isNew=true;
+            var counter=0;
+            for (var eachLine : data) {
+                var appNumber = generateHash(eachLine.get(1));
+                if (!alreadySentSet.contains(appNumber)) {
+                    if(isNew) {
+                        res.append("JOB FROM AROGYASATHI").append("\n\n");
+                        isNew=false;
+                    }
+                    res.append("JOB SEQUENCE: ").append(++counter).append("\n\n").
+                            append("Job title: ").append(eachLine.get(1)).append("\n\n")
+                            .append("Contact Details: ").append(eachLine.get(2)).append("\n\n")
+                            .append("Last Date: ").append(eachLine.get(3)).append("\n\n")
+                            .append("Post Name: ").append(eachLine.get(6)).append("\n\n")
+                            .append("Level: ").append(eachLine.get(7));
+                    res.append("\n\n\n");
+                    alreadySentSet.add(appNumber);
+                }
             }
         }
         writeHashValuesToFile(alreadySentSet);
         return res.toString();
+    }
+
+
+
+    public static String createDataForGoogle(List<JobData> googleData) {
+        StringBuilder res=new StringBuilder();
+        var alreadySentSet=readHashFromFile();
+
+        if(!googleData.isEmpty()) {
+            boolean isNew=true;
+            var counter=0;
+            for (var data : googleData) {
+                var appNumber = data.generateHash();
+                if (!alreadySentSet.contains(appNumber)) {
+                    if(isNew) {
+                        res.append("JOB FROM GOOGLE").append("\n\n").append("URL: ").append(googleData.get(0).getGoogleUrl())
+                                .append("\n\n");
+                        isNew=false;
+                    }
+                    res.append("JOB SEQUENCE: ").append(++counter).append("\n\n").
+                            append("Job title: ").append(data.getJobName()).append("\n\n")
+                            .append("Institute: ").append(data.getInstitute()).append("\n\n")
+                            .append("City: ").append(data.getCity());
+                    res.append("\n\n\n");
+                    alreadySentSet.add(appNumber);
+                }
+            }
+        }
+        writeHashValuesToFile(alreadySentSet);
+        return res.toString();
+
     }
     public static String generateHash(String input) {
         try {
@@ -82,4 +122,8 @@ public class Utility {
         }
     }
 
+    public static String joinString(String dataToSend, String dataFromGoogle) {
+
+        return dataToSend + "\n\n\n\n" +dataFromGoogle;
+    }
 }

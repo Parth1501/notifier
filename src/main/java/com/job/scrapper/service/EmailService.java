@@ -15,7 +15,7 @@ public class EmailService {
 
     // Method to send a simple email
     public void sendSimpleEmail(String[] toEmail, String subject, String body) {
-        if(body!=null && !body.isEmpty()) {
+        if(body!=null && !body.isBlank()) {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);
             message.setSubject(subject);

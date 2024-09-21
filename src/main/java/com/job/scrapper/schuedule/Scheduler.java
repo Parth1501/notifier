@@ -24,6 +24,12 @@ public class Scheduler {
         log.info("Scheduler invoked");
         var data=scrapper.scrapArogyaSathi();
         String dataToSend= Utility.createData(data);
-        service.sendSimpleEmail(Constants.emailAddressToSent,"Arogya Sathi Job Opning!!!", dataToSend);
+
+        var googleData=scrapper.scrapGoogleJob();
+        var dataFromGoogle=Utility.createDataForGoogle(googleData);
+
+        dataToSend=Utility.joinString(dataToSend,dataFromGoogle);
+        service.sendSimpleEmail(Constants.emailAddressToSent,"Job Opening for you!!!", dataToSend);
+        log.info("Job completed successfully");
     }
 }
