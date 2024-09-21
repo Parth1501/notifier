@@ -1,0 +1,14 @@
+spring.application.name: scrapper
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: laluraja2000@gmail.com
+    password: hwie knjs evbt qnak #hwie knjs evbt qnak
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
