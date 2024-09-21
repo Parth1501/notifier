@@ -11,13 +11,14 @@ import java.util.Set;
 
 @Slf4j
 public class Utility {
+    private static final String basefolder="./";
     public static String createData(List<List<String>> data) {
         StringBuilder res=new StringBuilder();
         var counter=0;
         var alreadySentSet=readHashFromFile();
         for(var eachLine:data) {
             var appNumber=generateHash(eachLine.get(1));
-//            if(!alreadySentSet.contains(appNumber)) {
+            if(!alreadySentSet.contains(appNumber)) {
                 res.append("JOB ").append(++counter).append("\n\n");
                 res.append("Job title: ").append(eachLine.get(1)).append("\n\n")
                         .append("Contact Details: ").append(eachLine.get(2)).append("\n\n")
@@ -26,7 +27,7 @@ public class Utility {
                         .append("Level: ").append(eachLine.get(7));
                 res.append("\n\n\n");
                 alreadySentSet.add(appNumber);
-//            }
+            }
         }
         writeHashValuesToFile(alreadySentSet);
         return res.toString();
@@ -54,7 +55,7 @@ public class Utility {
     }
 
     public static Set<String> readHashFromFile() {
-        String filePath = "src/main/resources/alreadySenttxt"; // Replace with your file path
+        String filePath = basefolder+"alreadySenttxt"; // Replace with your file path
         var set=new HashSet<String>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -69,7 +70,7 @@ public class Utility {
 
 
     public static void writeHashValuesToFile(Set<String> set) {
-        String filePath = "src/main/resources/alreadySenttxt"; // Replace with your file path
+        String filePath = basefolder+ "alreadySenttxt"; // Replace with your file path
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (String line : set) {

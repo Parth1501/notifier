@@ -19,7 +19,7 @@ public class Scheduler {
     @Autowired
     Scrapper scrapper;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/15 * * * ?")
     public void runWebScrapping(){
         log.info("Scheduler invoked");
         var data=scrapper.scrapArogyaSathi();
